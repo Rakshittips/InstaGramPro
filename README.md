@@ -13,7 +13,7 @@ Welcome to Instagram InstaPro – your one-stop destination for the latest Insta
 
 🌍 Official Website
 
-🔗 https://lnstagram-lnstapro.netlify.app
+🔗 https://rakshittips.github.io/InstaGramPro/index.html
 
 ❤️ Support
 
@@ -21,4 +21,4 @@ If this project helps you, please ⭐ Star this repository and share it with oth
 
 ---
 
-Made with ❤️ by Rakshittips
+Made with ❤️ by Rakshittips!
