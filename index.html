@@ -1,831 +1,762 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>InstaGram — iOS-Style InstaPro for Android</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-<style>
-  :root{
-    --bg:#0a0612;
-    --bg-soft:#120b1f;
-    --card:#150e22;
-    --card-border:rgba(255,255,255,0.08);
-    --text:#f4f2fb;
-    --text-dim:#a89fc2;
-    --text-faint:#6f6688;
-    --purple:#7c3aed;
-    --pink:#ec4899;
-    --orange:#f97362;
-    --grad: linear-gradient(135deg, #6d28d9 0%, #d946ef 50%, #fb7185 100%);
-    --green:#22c55e;
-    --glow1: rgba(124,58,237,0.25);
-    --glow2: rgba(236,72,153,0.18);
-    --glow3: rgba(249,115,98,0.15);
-  }
-
-  /* ---------- THEMES ---------- */
-  /* Default (body[data-theme="nova"]) uses the :root values above. */
-
-  body[data-theme="pulse"]{
-    --bg:#06110f;
-    --bg-soft:#0a1917;
-    --card:#0d1f1c;
-    --card-border:rgba(45,212,191,0.12);
-    --text:#eefaf7;
-    --text-dim:#8fb8b0;
-    --text-faint:#5c7d77;
-    --purple:#0d9488;
-    --pink:#2dd4bf;
-    --orange:#5eead4;
-    --grad: linear-gradient(135deg, #0d9488 0%, #14b8a6 50%, #5eead4 100%);
-    --green:#34d399;
-    --glow1: rgba(13,148,136,0.28);
-    --glow2: rgba(45,212,191,0.16);
-    --glow3: rgba(94,234,212,0.14);
-  }
-
-  body[data-theme="ember"]{
-    --bg:#120806;
-    --bg-soft:#1a0d0a;
-    --card:#1f120d;
-    --card-border:rgba(251,146,60,0.14);
-    --text:#fdf3ee;
-    --text-dim:#d1a692;
-    --text-faint:#8a6455;
-    --purple:#ea580c;
-    --pink:#f97316;
-    --orange:#fbbf24;
-    --grad: linear-gradient(135deg, #b91c1c 0%, #ea580c 50%, #fbbf24 100%);
-    --green:#a3e635;
-    --glow1: rgba(234,88,12,0.26);
-    --glow2: rgba(251,191,36,0.16);
-    --glow3: rgba(185,28,28,0.16);
-  }
-
-  body[data-theme="depth"]{
-    --bg:#050a14;
-    --bg-soft:#0a1220;
-    --card:#0e1728;
-    --card-border:rgba(56,189,248,0.14);
-    --text:#eef6fd;
-    --text-dim:#8fa8c2;
-    --text-faint:#556b85;
-    --purple:#2563eb;
-    --pink:#38bdf8;
-    --orange:#818cf8;
-    --grad: linear-gradient(135deg, #1d4ed8 0%, #0ea5e9 50%, #818cf8 100%);
-    --green:#34d399;
-    --glow1: rgba(37,99,235,0.28);
-    --glow2: rgba(56,189,248,0.16);
-    --glow3: rgba(129,140,248,0.14);
-  }
-  /* ---------- END THEMES ---------- */
-
-  *{box-sizing:border-box; margin:0; padding:0;}
-  html{scroll-behavior:smooth;}
-  html, body{
-    max-width:100%;
-    overflow-x:hidden;
-  }
-  body{
-    background:var(--bg);
-    color:var(--text);
-    font-family:'Plus Jakarta Sans', sans-serif;
-    position:relative;
-    width:100%;
-    transition:background 0.4s ease, color 0.4s ease;
-  }
-  h1,h2,h3,.display{
-    font-family:'Syne', sans-serif;
-    font-weight:700;
-    letter-spacing:-0.02em;
-  }
-  a{text-decoration:none; color:inherit;}
-  .glow{
-    position:fixed;
-    border-radius:50%;
-    filter:blur(120px);
-    z-index:0;
-    pointer-events:none;
-    max-width:100vw;
-    transition:background 0.4s ease;
-  }
-  .glow.g1{ width:600px; height:600px; background:var(--glow1); top:-200px; left:-150px;}
-  .glow.g2{ width:500px; height:500px; background:var(--glow2); top:900px; right:-200px;}
-  .glow.g3{ width:500px; height:500px; background:var(--glow3); bottom:0; left:-150px;}
-
-  nav{
-    position:sticky; top:0; z-index:50;
-    display:flex; align-items:center; justify-content:space-between;
-    padding:18px 24px;
-    background:rgba(10,6,18,0.75);
-    backdrop-filter:blur(16px);
-    border-bottom:1px solid var(--card-border);
-  }
-  .brand{display:flex; align-items:center; gap:12px;}
-  .brand-icon{
-    width:30px; height:30px; border-radius:14px;
-    background:var(--grad);
-    display:flex; align-items:center; justify-content:center;
-    font-size:20px;
-    overflow:hidden;
-    flex-shrink:0;
-    transition:background 0.4s ease;
-  }
-  .brand-icon img{
-    width:100%; height:100%;
-    object-fit:cover;
-    display:block;
-  }
-  .brand-name{font-family:'Syne'; font-weight:100; font-size:19px;}
-  .brand-sub{font-size:10px; letter-spacing:0.12em; color:var(--text-faint); text-transform:uppercase;}
-  .nav-actions{display:flex; align-items:center; gap:10px;}
-  .menu-btn, .theme-btn{
-    width:44px; height:44px; border-radius:12px;
-    background:rgba(255,255,255,0.05);
-    border:1px solid var(--card-border);
-    display:flex; align-items:center; justify-content:center;
-    font-size:18px; color:var(--text-dim);
-    cursor:pointer; transition:background 0.2s, border-color 0.2s;
-  }
-  .theme-btn{ position:relative; }
-  .theme-btn .swatch{
-    width:18px; height:18px; border-radius:50%;
-    background:var(--grad);
-  }
-
-  section{position:relative; z-index:1; padding:64px 24px;}
-
-  .eyebrow{
-    display:inline-flex; align-items:center; gap:5px;
-    padding:5px 16px;
-    border-radius:500px;
-    background:rgba(124,58,237,0.12);
-    border:1px solid rgba(124,58,237,0.35);
-    font-size:12px; letter-spacing:0.1em; text-transform:uppercase;
-    color:#d8b4fe;
-    margin-bottom:28px;
-  }
-  .dot{width:4px; height:6px; border-radius:50%; background:var(--pink);}
-
-  .hero h1{
-    font-size:44px; line-height:1.08; margin-bottom:20px;
-  }
-  .hero h1 .accent{
-    background:var(--grad);
-    -webkit-background-clip:text;
-    background-clip:text;
-    color:transparent;
-  }
-  .hero p.lead{
-    color:var(--text-dim); font-size:16px; line-height:1.6; margin-bottom:32px; max-width:520px;
-  }
-
-  .cta-primary{
-    display:flex; align-items:center; justify-content:center; gap:10px;
-    width:100%; padding:18px 24px;
-    border-radius:16px;
-    background:var(--grad);
-    color:white; font-weight:700; font-size:16px;
-    box-shadow:0 8px 30px rgba(217,70,239,0.25);
-    border:none; cursor:pointer;
-    transition:background 0.4s ease;
-  }
-  .cta-secondary{
-    display:block; text-align:center;
-    width:100%; padding:16px 24px; margin-top:12px;
-    border-radius:16px;
-    background:rgba(255,255,255,0.03);
-    border:1px solid var(--card-border);
-    color:var(--text-dim); font-weight:600; font-size:14px;
-  }
-  .version-pill{
-    margin-top:16px; padding:10px 18px;
-    border:1px solid var(--card-border); border-radius:12px;
-    text-align:center; font-family:monospace; letter-spacing:0.05em;
-    color:var(--text-faint); font-size:13px;
-  }
-
-  .stats{
-    display:grid; grid-template-columns:repeat(3,1fr);
-    gap:12px; margin-top:48px; text-align:center;
-  }
-  .stat-num{font-family:'Syne'; font-weight:700; font-size:24px;}
-  .stat-num.pink{ background:var(--grad); -webkit-background-clip:text; background-clip:text; color:transparent;}
-  .stat-label{font-size:10px; letter-spacing:0.1em; text-transform:uppercase; color:var(--text-faint); margin-top:4px;}
-
-  .screenshots-section {
-    padding: 48px 0 52px;
-    overflow: hidden;
-  }
-  .screenshots-header {
-    padding: 0 24px;
-    margin-bottom: 28px;
-  }
-  .screenshots-header h2 {
-    font-family: 'Syne', sans-serif;
-    font-size: 1.65rem; font-weight: 700;
-    color: var(--text); margin-bottom: 8px;
-  }
-  .screenshots-header p {
-    color: var(--text-faint); font-size: 0.88rem;
-  }
-  .screenshots-scroll {
-    display: flex;
-    gap: 16px;
-    padding: 8px 24px 16px;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-  }
-  .screenshots-scroll::-webkit-scrollbar { display: none; }
-  .screenshot-frame {
-    flex: 0 0 auto;
-    width: 200px;
-    scroll-snap-align: start;
-    border-radius: 22px;
-    overflow: hidden;
-    border: 1.5px solid rgba(168,85,247,0.25);
-    box-shadow: 0 8px 32px rgba(0,0,0,0.45), 0 0 0 1px rgba(255,255,255,0.04);
-    background: var(--card);
-    transition: transform 0.25s, box-shadow 0.25s;
-    position: relative;
-  }
-  .screenshot-frame:hover {
-    transform: translateY(-4px) scale(1.02);
-    box-shadow: 0 16px 48px rgba(168,85,247,0.25), 0 0 0 1px rgba(168,85,247,0.2);
-  }
-  .screenshot-frame img {
-    width: 100%;
-    display: block;
-    border-radius: 20px;
-  }
-  .scroll-hint {
-    text-align: center;
-    margin-top: 14px;
-    color: var(--text-faint);
-    font-size: 0.75rem;
-    letter-spacing: 0.04em;
-    display: flex; align-items: center; justify-content: center; gap: 6px;
-  }
-  .scroll-hint::before,
-  .scroll-hint::after {
-    content: '';
-    width: 20px; height: 1px;
-    background: var(--card-border);
-  }
-
-  .section-label{
-    font-size:11px; letter-spacing:0.15em; text-transform:uppercase;
-    color:var(--orange); font-weight:700; margin-bottom:10px;
-  }
-  .section-title{font-size:30px; margin-bottom:14px;}
-  .section-desc{color:var(--text-dim); line-height:1.6; margin-bottom:32px; font-size:15px;}
-  .section-desc b{color:var(--text);}
-
-  .card{
-    background:var(--card);
-    border:1px solid var(--card-border);
-    border-radius:20px;
-    padding:28px 24px;
-    margin-bottom:16px;
-    transition:background 0.4s ease, border-color 0.4s ease;
-  }
-  .feature-list{list-style:none;}
-  .feature-list li{
-    display:flex; align-items:center; gap:12px;
-    padding:14px 0; border-bottom:1px solid rgba(255,255,255,0.05);
-    font-size:14px; color:var(--text-dim);
-  }
-  .feature-list li:last-child{border-bottom:none;}
-  .check{color:var(--green); font-weight:700;}
-
-  .join-section{
-    text-align:center;
-  }
-  .join-section h1{font-size:35px; line-height:0.50; margin-bottom:6px;}
-  .join-section .accent{
-    background:var(--grad); -webkit-background-clip:text; background-clip:text; color:transparent;
-  }
-  .join-section p{color:var(--text-dim); margin:20px 0 28px; line-height:1.0;}
-
-  footer{
-    text-align:center; padding:40px 24px; color:var(--text-faint); font-size:12px;
-    border-top:1px solid var(--card-border);
-  }
-  footer b{color:var(--text-dim);}
-
-  @media(min-width:500px){
-    .hero h1{font-size:40px;}
-    .cta-primary, .cta-secondary{max-width:360px; margin-left:auto; margin-right:auto;}
-    .version-pill{max-width:360px; margin-left:auto; margin-right:auto;}
-  }
-
-  .menu-btn:hover, .theme-btn:hover{ background:rgba(255,255,255,0.08); }
-  .menu-btn:active, .theme-btn:active{ transform:scale(0.95); }
-
-  .overlay{
-    position:fixed; inset:0; z-index:90;
-    background:rgba(0,0,0,0.55);
-    backdrop-filter:blur(2px);
-    opacity:0; pointer-events:none;
-    transition:opacity 0.25s ease;
-  }
-  .overlay.open{ opacity:1; pointer-events:auto; }
-
-  .drawer{
-    position:fixed; top:0; right:0; bottom:0; z-index:91;
-    width:78%; max-width:320px;
-    background:var(--bg-soft);
-    border-left:1px solid var(--card-border);
-    transform:translateX(100%);
-    transition:transform 0.3s cubic-bezier(.4,0,.2,1), background 0.4s ease;
-    padding:20px;
-    overflow-y:auto;
-  }
-  .drawer.open{ transform:translateX(0); }
-  .drawer-head{ display:flex; align-items:center; justify-content:space-between; margin-bottom:24px; }
-  .drawer-close{
-    width:38px; height:38px; border-radius:10px;
-    background:rgba(255,255,255,0.05); border:1px solid var(--card-border);
-    display:flex; align-items:center; justify-content:center;
-    font-size:16px; color:var(--text-dim); cursor:pointer;
-  }
-  .drawer-link{
-    display:flex; align-items:center; justify-content:space-between;
-    padding:16px 4px; font-size:15px; font-weight:600;
-    border-bottom:1px solid rgba(255,255,255,0.06);
-    color:var(--text); cursor:pointer;
-  }
-  .drawer-link .arrow{ color:var(--text-faint); font-size:13px; }
-  .drawer-cta{
-    display:block; text-align:center; margin-top:24px;
-    padding:14px; border-radius:14px;
-    background:var(--grad); color:white; font-weight:700; font-size:14px;
-    transition:background 0.4s ease;
-  }
-
-  /* Theme picker panel */
-  .theme-panel{
-    position:fixed; top:70px; right:16px; z-index:92;
-    width:220px;
-    background:var(--bg-soft);
-    border:1px solid var(--card-border);
-    border-radius:18px;
-    padding:14px;
-    box-shadow:0 20px 50px rgba(0,0,0,0.5);
-    opacity:0; transform:translateY(-8px) scale(0.97);
-    pointer-events:none;
-    transition:opacity 0.2s ease, transform 0.2s ease, background 0.4s ease;
-  }
-  .theme-panel.open{ opacity:1; transform:translateY(0) scale(1); pointer-events:auto; }
-  .theme-panel-title{
-    font-size:11px; letter-spacing:0.12em; text-transform:uppercase;
-    color:var(--text-faint); margin-bottom:10px; padding:0 4px;
-  }
-  .theme-option{
-    display:flex; align-items:center; gap:10px;
-    padding:10px 8px; border-radius:12px;
-    cursor:pointer; font-size:13px; font-weight:600; color:var(--text-dim);
-    border:1px solid transparent;
-  }
-  .theme-option:hover{ background:rgba(255,255,255,0.04); }
-  .theme-option.active{
-    color:var(--text);
-    background:rgba(255,255,255,0.05);
-    border-color:var(--card-border);
-  }
-  .theme-swatch{
-    width:22px; height:22px; border-radius:50%; flex-shrink:0;
-    box-shadow:inset 0 0 0 1px rgba(255,255,255,0.15);
-  }
-  .theme-swatch.nova{ background:linear-gradient(135deg, #6d28d9 0%, #d946ef 50%, #fb7185 100%); }
-  .theme-swatch.pulse{ background:linear-gradient(135deg, #0d9488 0%, #14b8a6 50%, #5eead4 100%); }
-  .theme-swatch.ember{ background:linear-gradient(135deg, #b91c1c 0%, #ea580c 50%, #fbbf24 100%); }
-  .theme-swatch.depth{ background:linear-gradient(135deg, #1d4ed8 0%, #0ea5e9 50%, #818cf8 100%); }
-  .theme-option .check-mark{ margin-left:auto; color:var(--green); font-weight:700; opacity:0; }
-  .theme-option.active .check-mark{ opacity:1; }
-
-  .feat-card{
-    background:var(--card);
-    border:1px solid var(--card-border);
-    border-radius:20px;
-    padding:26px 22px;
-    margin-bottom:16px;
-    transition:background 0.4s ease, border-color 0.4s ease;
-  }
-  .feat-card h3{ font-size:19px; margin-bottom:10px; }
-  .feat-card p{ color:var(--text-dim); font-size:14px; line-height:1.7; }
-
-  .links-section {
-    padding: 0 24px 40px;
-    display: flex; flex-direction: column; gap: 12px;
-  }
-  .link-btn {
-    display: flex; align-items: center; justify-content: center; gap: 10px;
-    padding: 16px 20px;
-    background: var(--card);
-    border: 1px solid var(--card-border);
-    border-radius: 14px;
-    color: var(--text);
-    font-family: 'Syne', sans-serif;
-    font-weight: 500; font-size: 0.92rem;
-    cursor: pointer; text-decoration: none;
-    transition: border-color 0.2s, background 0.4s ease;
-  }
-
-  .community-section {
-    padding: 52px 24px 48px;
-    text-align: center;
-    background: radial-gradient(ellipse 70% 50% at 50% 50%, var(--glow1) 0%, transparent 70%);
-    transition:background 0.4s ease;
-  }
-  .community-section h2 {
-    font-family: 'Syne', sans-serif;
-    font-size: 2rem; font-weight: 700;
-    color: var(--text); line-height: 1.2;
-    margin-bottom: 18px;
-  }
-  .btn-group {
-    display: flex; flex-direction: column; gap: 12px;
-    max-width: 280px; margin: 0 auto;
-  }
-  .btn-primary {
-    display: flex; align-items: center; justify-content: center; gap: 8px;
-    padding: 15px 24px;
-    background: var(--grad);
-    color: #fff;
-    font-family: 'Syne', sans-serif;
-    font-weight: 700; font-size: 0.95rem;
-    border: none; border-radius: 14px;
-    cursor: pointer; text-decoration: none;
-    transition: opacity 0.2s, transform 0.2s, background 0.4s ease;
-    box-shadow: 0 4px 24px rgba(168,85,247,0.35);
-  }
-  .btn-secondary {
-    display: flex; align-items: center; justify-content: center; gap: 8px;
-    padding: 14px 24px;
-    background: transparent;
-    color: var(--text);
-    font-family: 'Syne', sans-serif;
-    font-weight: 600; font-size: 0.95rem;
-    border: 1px solid var(--card-border);
-    border-radius: 14px;
-    cursor: pointer; text-decoration: none;
-    transition: border-color 0.2s, background 0.2s;
-  }
-
-  .toast{
-    position:fixed; left:50%; bottom:28px; z-index:99;
-    transform:translate(-50%, 20px);
-    background:var(--card);
-    border:1px solid var(--card-border);
-    color:var(--text);
-    padding:12px 20px; border-radius:100px;
-    font-size:13px; font-weight:600;
-    display:flex; align-items:center; gap:8px;
-    opacity:0; pointer-events:none;
-    transition:opacity 0.25s ease, transform 0.25s ease;
-    box-shadow:0 10px 30px rgba(0,0,0,0.4);
-  }
-  .toast.show{ opacity:1; transform:translate(-50%, 0); }
-  .toast .dotp{ width:10px; height:10px; border-radius:50%; background:var(--grad); }
-
-  /* Donate / Support section */
-  .support-section{
-    padding-top:0;
-  }
-  .support-card{
-    background:var(--card);
-    border:1px solid var(--card-border);
-    border-radius:22px;
-    padding:32px 24px;
-    text-align:center;
-  }
-  .support-heart{
-    width:56px; height:56px; border-radius:16px;
-    background:var(--grad);
-    display:flex; align-items:center; justify-content:center;
-    font-size:24px; margin:0 auto 18px;
-    box-shadow:0 8px 24px rgba(217,70,239,0.28);
-  }
-  .support-card h2{ font-size:24px; margin-bottom:10px; }
-  .support-card p{ color:var(--text-dim); font-size:14px; line-height:1.6; margin-bottom:26px; max-width:400px; margin-left:auto; margin-right:auto; }
-  .support-options{
-    display:flex; flex-direction:column; gap:12px; max-width:340px; margin:0 auto;
-  }
-  .support-option{
-    display:flex; align-items:center; gap:14px;
-    padding:14px 16px;
-    background:rgba(255,255,255,0.03);
-    border:1px solid var(--card-border);
-    border-radius:14px;
-    text-align:left;
-    transition:border-color 0.2s, background 0.2s;
-  }
-  .support-option:hover{ border-color:rgba(255,255,255,0.2); background:rgba(255,255,255,0.05); }
-  .support-icon{
-    width:38px; height:38px; border-radius:10px; flex-shrink:0;
-    display:flex; align-items:center; justify-content:center;
-    font-size:17px; color:#fff;
-  }
-  .support-icon.paypal{ background:#0070ba; }
-  .support-icon.upi{ background:#22c55e; }
-  .support-icon.telegram{ background:#26a5e4; }
-  .support-option .txt{ flex:1; }
-  .support-option .txt .name{ font-weight:700; font-size:14px; }
-  .support-option .txt .sub{ font-size:11.5px; color:var(--text-faint); margin-top:1px; }
-  .support-option .chev{ color:var(--text-faint); font-size:13px; }
-  .support-note{ margin-top:20px; font-size:11.5px; color:var(--text-faint); }
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>InstaGram — iOS-Style InstaPro</title>
+  <meta name="description" content="Experience Instagram Pro with iOS-style UI for Android, privacy features, media downloading, ad-free browsing, and exclusive customization options.">
+  <meta property="og:title" content="InstaGram — iOS-Style InstaPro">
+  <meta property="og:description" content="Experience Instagram Pro with iOS-style UI for Android, privacy features, media downloading, ad-free browsing, and exclusive customization options.">
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/src/styles.css">
 </head>
 <body data-theme="nova">
 
-<div class="glow g1"></div>
-<div class="glow g2"></div>
-<div class="glow g3"></div>
+  <!-- Ambient Glows -->
+  <div class="glow g1"></div>
+  <div class="glow g2"></div>
+  <div class="glow g3"></div>
 
-<nav>
-  <div class="brand">
-    <div class="brand-icon">
-      <img src="https://raw.githubusercontent.com/Rakshittips/InstaGramPro/refs/heads/main/Screenshots/ncy.png" alt="InstaPro Icon" onerror="this.parentElement.innerHTML='📨'">
+  <!-- Top Sticky Navigation -->
+  <nav>
+    <div class="brand" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+      <div class="brand-icon">
+        <img src="/Screenshots/ncy.png" alt="InstaPro Icon" onerror="this.parentElement.innerHTML='📸'">
+      </div>
+      <div>
+        <div class="brand-name">InstaPro</div>
+        <div class="brand-sub">iOS for Android</div>
+      </div>
     </div>
-    <div>
-      <div class="brand-name">InstaPro</div>
-      <div class="brand-sub">iOS for Android</div>
-    </div>
-  </div>
-  <div class="nav-actions">
-    <div class="theme-btn" id="themeBtn" onclick="toggleThemePanel()" title="Change theme">
-      <div class="swatch"></div>
-    </div>
-    <div class="menu-btn" id="menuBtn" onclick="openMenu()">☰</div>
-  </div>
-</nav>
 
-<div class="theme-panel" id="themePanel">
-  <div class="theme-panel-title">Choose a theme</div>
-  <div class="theme-option active" data-theme-choice="nova" onclick="setTheme('nova')">
-    <div class="theme-swatch nova"></div>
-    <span>Nova Purple</span>
-    <span class="check-mark">✓</span>
-  </div>
-  <div class="theme-option" data-theme-choice="pulse" onclick="setTheme('pulse')">
-    <div class="theme-swatch pulse"></div>
-    <span>Pulse Teal</span>
-    <span class="check-mark">✓</span>
-  </div>
-  <div class="theme-option" data-theme-choice="ember" onclick="setTheme('ember')">
-    <div class="theme-swatch ember"></div>
-    <span>Ember Orange</span>
-    <span class="check-mark">✓</span>
-  </div>
-  <div class="theme-option" data-theme-choice="depth" onclick="setTheme('depth')">
-    <div class="theme-swatch depth"></div>
-    <span>Ocean Depth</span>
-    <span class="check-mark">✓</span>
-  </div>
-</div>
+    <!-- Desktop Nav Links -->
+    <div class="nav-desktop-links">
+      <a href="#privacy-hub" class="nav-link">Ghost Mode</a>
+      <a href="#simulator" class="nav-link">iOS Simulator</a>
+      <a href="#screenshots" class="nav-link">Screenshots</a>
+      <a href="#download" class="nav-link">Download APK</a>
+    </div>
 
-<div class="overlay" id="overlay" onclick="closeMenu()"></div>
-<div class="drawer" id="drawer">
-  <div class="drawer-head">
-    <div class="brand-name">Menu</div>
-    <div class="drawer-close" onclick="closeMenu()">✕</div>
-  </div>
-  <a href="#tuner" class="drawer-link" onclick="closeMenu()"><span>New Features!</span><span class="arrow">›</span></a>
-  <a href="#join" class="drawer-link" onclick="closeMenu()"><span>Join Channel</span><span class="arrow">›</span></a>
-  <a href="#support" class="drawer-link" onclick="closeMenu()"><span>Support the Project</span><span class="arrow">›</span></a>
-  <div class="drawer-link" onclick="closeMenu()"><span>About Developer</span><span class="arrow">›</span></div>
-  <a href="https://devuploads.com/wba40rxiiyfs" class="drawer-cta">Download APK</a>
-</div>
+    <div class="nav-actions">
+      <!-- Stealth Mode Status Indicator -->
+      <div class="stealth-pill" id="navStealthBadge" title="Ghost Mode active in InstaPro">
+        <span class="stealth-dot"></span>
+        <span>Ghost Mode Active</span>
+      </div>
 
-<section class="hero">
-  <div class="eyebrow"><span class="dot"></span> iOS InstaPro iPhone!</div>
-  <h1>The iOS InstaMod <span class="accent">iOS-Style</span> InstaGram for Android!</h1>
-  <p class="lead">Experience Instagram Pro like never before with privacy features, media downloading, ad-free browsing, and exclusive customization options.</p>
+      <!-- Theme Switcher Button -->
+      <div class="theme-btn" id="themeBtn" onclick="window.instapro.toggleThemePanel()" title="Change Color Theme">
+        <div class="swatch"></div>
+      </div>
 
-  <a href="https://devuploads.com/wba40rxiiyfs" class="cta-primary" download target="_blank" rel="noopener">Download APK</a>
-  <div class="version-pill">NEW! V15.70</div>
+      <!-- Quick APK CTA -->
+      <a href="#download" class="nav-btn nav-apk-btn">Get v15.70</a>
 
-  <div class="stats">
-    <div>
-      <div class="stat-num pink">1.1k</div>
-      <div class="stat-label">Downloads</div>
+      <!-- Mobile Menu Button -->
+      <div class="menu-btn" id="menuBtn" onclick="window.instapro.openMenu()">☰</div>
     </div>
-    <div>
-      <div class="stat-num pink">3.5/2</div>
-      <div class="stat-label">User Rating</div>
-    </div>
-    <div>
-      <div class="stat-num pink">22K+</div>
-      <div class="stat-label">Fans Channel</div>
-    </div>
-  </div>
-</section>
+  </nav>
 
-<section class="screenshots-section">
-  <div class="screenshots-header">
-    <h2>See it in action</h2>
-    <p>Beautiful iOS-style UI on Android</p>
-  </div>
-
-  <div class="screenshots-scroll">
-    <div class="screenshot-frame">
-      <img src="https://raw.githubusercontent.com/Rakshittips/InstaGramPro/refs/heads/main/Screenshots/InstaPro-01.jpg" alt="InstaPro Screenshot 1" loading="lazy" />
+  <!-- Theme Selector Dropdown Panel -->
+  <div class="theme-panel" id="themePanel">
+    <div style="font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-faint); margin-bottom: 10px; font-weight: 700;">
+      Choose Theme
     </div>
-    <div class="screenshot-frame">
-      <img src="https://raw.githubusercontent.com/Rakshittips/InstaGramPro/refs/heads/main/Screenshots/InstaPro-02.jpg" alt="InstaPro Screenshot 2" loading="lazy" />
+    <div class="theme-option active" data-theme-choice="nova" onclick="window.instapro.setTheme('nova')">
+      <div class="theme-swatch nova"></div>
+      <span>Nova Purple</span>
+      <span class="check-mark">✓</span>
     </div>
-    <div class="screenshot-frame">
-      <img src="https://raw.githubusercontent.com/Rakshittips/InstaGramPro/refs/heads/main/Screenshots/InstaPro-03.jpg" alt="InstaPro Screenshot 3" loading="lazy" />
+    <div class="theme-option" data-theme-choice="pulse" onclick="window.instapro.setTheme('pulse')">
+      <div class="theme-swatch pulse"></div>
+      <span>Pulse Teal</span>
+      <span class="check-mark">✓</span>
     </div>
-    <div class="screenshot-frame">
-      <img src="https://raw.githubusercontent.com/Rakshittips/InstaGramPro/refs/heads/main/Screenshots/InstaPro-04.jpg" alt="InstaPro Screenshot 4" loading="lazy" />
+    <div class="theme-option" data-theme-choice="ember" onclick="window.instapro.setTheme('ember')">
+      <div class="theme-swatch ember"></div>
+      <span>Ember Orange</span>
+      <span class="check-mark">✓</span>
     </div>
-    <div class="screenshot-frame">
-      <img src="https://raw.githubusercontent.com/Rakshittips/InstaGramPro/refs/heads/main/Screenshots/InstaPro-05.jpg" alt="InstaPro Screenshot 5" loading="lazy" />
+    <div class="theme-option" data-theme-choice="depth" onclick="window.instapro.setTheme('depth')">
+      <div class="theme-swatch depth"></div>
+      <span>Ocean Depth</span>
+      <span class="check-mark">✓</span>
     </div>
-    <div class="screenshot-frame">
-      <img src="https://raw.githubusercontent.com/Rakshittips/InstaGramPro/refs/heads/main/Screenshots/InstaPro-06.jpg" alt="InstaPro Screenshot 6" loading="lazy" />
+    <div class="theme-option" data-theme-choice="amoled" onclick="window.instapro.setTheme('amoled')">
+      <div class="theme-swatch amoled"></div>
+      <span>Midnight AMOLED</span>
+      <span class="check-mark">✓</span>
     </div>
-    <div class="screenshot-frame">
-      <img src="https://raw.githubusercontent.com/Rakshittips/InstaGramPro/refs/heads/main/Screenshots/InstaPro-07.jpg" alt="InstaPro Screenshot 7" loading="lazy" />
-    </div>
-    <div class="screenshot-frame">
-      <img src="https://raw.githubusercontent.com/Rakshittips/InstaGramPro/refs/heads/main/Screenshots/InstaPro-08.jpg" alt="InstaPro Screenshot 8" loading="lazy" />
-    </div>
-    <div class="screenshot-frame">
-      <img src="https://raw.githubusercontent.com/Rakshittips/InstaGramPro/refs/heads/main/Screenshots/InstaPro-09.jpg" alt="InstaPro Screenshot 9" loading="lazy" />
-    </div>
-    <div class="screenshot-frame">
-      <img src="https://raw.githubusercontent.com/Rakshittips/InstaGramPro/refs/heads/main/Screenshots/InstaPro-010.jpg" alt="InstaPro Screenshot 10" loading="lazy" />
-    </div>
-    <div class="screenshot-frame">
-      <img src="https://raw.githubusercontent.com/Rakshittips/InstaGramPro/refs/heads/main/Screenshots/InstaPro-011.jpg" alt="InstaPro Screenshot 11" loading="lazy" />
-    </div>
-    <div class="screenshot-frame">
-      <img src="https://raw.githubusercontent.com/Rakshittips/InstaGramPro/refs/heads/main/Screenshots/InstaPro-012.jpg" alt="InstaPro Screenshot 12" loading="lazy" />
+    <div class="theme-option" data-theme-choice="ioslight" onclick="window.instapro.setTheme('ioslight')">
+      <div class="theme-swatch ioslight"></div>
+      <span>iOS Light</span>
+      <span class="check-mark">✓</span>
     </div>
   </div>
 
-  <div class="scroll-hint">swipe to explore</div>
-</section>
-
-<section id="tuner">
-  <div class="eyebrow"><span class="dot"></span> High Performance</div>
-  <h2 class="section-title">Refined for Speed</h2>
-  <p class="section-desc">InstaPro combines the power of Instagram with a smooth iOS-inspired experience! Fully optimized for both newer and older Android devices, featuring advanced optimizations that use up to 40% less RAM than the standard app while delivering a faster and smoother experience.</p>
-
-<div class="card">
-  <div class="section-label" style="margin-bottom:16px;">Features Included</div>
-  <ul class="feature-list">
-    <li><span class="check">✓</span> Stealth Ghost Mode</li>
-    <li><span class="check">✓</span> [Base Update] 439.0.0.38.89</li>
-    <li><span class="check">✓</span> [Added] Custom Story Font</li>
-    <li><span class="check">✓</span> [ReAdded] Profile Post Download Button</li>
-    <li><span class="check">✓</span> [Enabled] PiP Feature</li>
-    <li><span class="check">✓</span> [Fixed] InstaPro2 Download Button Not Appearing</li>
-    <li><span class="check">✓</span> [Fixed] InstaPro Not Restarting After Feature Enable</li>
-    <li><span class="check">✓</span> [Fixed] Many Random Crashes</li>
-    <li><span class="check">✓</span> [Misc] Many More Improvements</li>
-  </ul>
-</div>
-</section>
-
-<section>
-  <div class="section-label">More Features</div>
-  <h2 class="section-title">Everything you need</h2>
-  <p class="section-desc">Discover the powerful tools that make InstaGram Pro! the ultimate social media companion.</p>
-
-  <div class="feat-card">
-    <h3>Media Downloader</h3>
-    <p>Download photos, videos, stories, and reels directly to your device with a single tap.</p>
-  </div>
-  <div class="feat-card">
-    <h3>Ad-Free Experience</h3>
-    <p>Browse your chats without interruptions. Remove all sponsored posts and ads completely.</p>
-  </div>
-  <div class="feat-card">
-    <h3>Ghost Mode.</h3>
-    <p>View stories, read messages, and type without anyone knowing. Stay completely invisible.</p>
-  </div>
-  <div class="feat-card">
-    <h3>Customization</h3>
-    <p>Change themes, fonts, and colors. Make your InstaPro look exactly how you want it.</p>
-  </div>
-  <div class="feat-card">
-    <h3>Enhanced Privacy</h3>
-    <p>Disable typing indicators, hide view status, and protect your app with a custom PIN lock.</p>
-  </div>
-  <div class="feat-card">
-    <h3>High Quality</h3>
-    <p>Upload and view photos and videos in premium quality without compression.</p>
-  </div>
-</section>
-
-<section id="support" class="support-section">
-  <div class="support-card">
-    <div class="support-heart">❤️</div>
-    <h2>Support the project</h2>
-    <p>InstaPro is built and maintained solo, in free time. If it's useful to you, a small donation keeps updates coming.</p>
-    <div class="support-options">
-      <a href="https://rakshittips.github.io/Rakshittips/DonateSupport.html" class="support-option">
-        <div class="support-icon upi">₹</div>
-        <div class="txt"><div class="name">UPI</div><div class="sub">For India — GPay, PhonePe, Paytm</div></div>
-        <div class="chev">›</div>
-      </a>
-      <a href="https://t.me/Mr_Rakshit_2_0" class="support-option">
-        <div class="support-icon telegram">✈</div>
-        <div class="txt"><div class="name">Telegram</div><div class="sub">DM for other donate options</div></div>
-        <div class="chev">›</div>
-      </a>
+  <!-- Mobile Drawer Menu -->
+  <div class="overlay" id="overlay" onclick="window.instapro.closeMenu()"></div>
+  <div class="drawer" id="drawer">
+    <div class="drawer-head">
+      <div class="brand-name">Menu</div>
+      <div class="nav-btn" style="width:36px; height:36px;" onclick="window.instapro.closeMenu()">✕</div>
     </div>
-    <div class="support-note">Every bit helps keep InstaPro ad-free and updated.</div>
-  </div>
-</section>
-
-<section id="join">
-  <section class="community-section">
-    <h2>
-      Telegram<br>Join.<br>
-      Maintained by<br>Rakshittips!
-    </h2>
-    <div class="btn-group" style="margin-bottom: 0;">
-      <a href="https://t.me/Mr_Rakshit_2_0" class="btn-primary">&nbsp;Join Channel</a>
-      <a href="https://rakshittips.github.io/Rakshittips/index.html" class="btn-secondary"> &nbsp;About Rakshittips</a>
+    <a href="#privacy-hub" class="drawer-link" onclick="window.instapro.closeMenu()">
+      <span>👁️ Stealth Ghost Mode</span><span class="arrow">›</span>
+    </a>
+    <a href="#simulator" class="drawer-link" onclick="window.instapro.closeMenu()">
+      <span>📱 Live iOS Simulator</span><span class="arrow">›</span>
+    </a>
+    <a href="#screenshots" class="drawer-link" onclick="window.instapro.closeMenu()">
+      <span>🖼️ App Screenshots</span><span class="arrow">›</span>
+    </a>
+    <a href="#tuner" class="drawer-link" onclick="window.instapro.closeMenu()">
+      <span>⚡ Performance & Speed</span><span class="arrow">›</span>
+    </a>
+    <div class="drawer-link" onclick="window.instapro.openDevModal()">
+      <span>👨‍💻 About Developer (Rakshittips)</span><span class="arrow">›</span>
     </div>
-  </section>
-</section>
+    <a href="#support" class="drawer-link" onclick="window.instapro.closeMenu()">
+      <span>❤️ Support Project</span><span class="arrow">›</span>
+    </a>
+    <a href="#download" class="cta-primary" style="margin-top: 24px; text-align: center;" onclick="window.instapro.closeMenu()">
+      Download APK v15.70
+    </a>
+  </div>
 
-<section class="links-section">
-  <a href="https://www.instagram.com/mr._rakshit_2.0" class="link-btn">• &nbsp; Official InstaGram Rakshittips!</a>
-  <a href="https://github.com/Rakshittips" class="link-btn">• &nbsp;GitHub Repository</a>
-  <a href="https://t.me/Mr_Rakshit_2_0" class="link-btn">• &nbsp;Developer Updates</a>
-</section>
+  <main class="container">
 
-<footer>
-  <p>Crafted with by <a href="https://rakshittips.github.io/Rakshittips/index.html" target="_blank" style="color:#c084fc;text-decoration:none;font-weight:600;">Rakshittips.</a><br>2026 Mr_Rakshit_2.0 Made with ❤️ by Rakshittips</p>
-</footer>
+    <!-- HERO SECTION -->
+    <section class="hero">
+      <div class="eyebrow"><span class="dot"></span> iOS InstaMod for Android</div>
+      <h1>Experience the Smooth <span class="accent">iOS-Style</span> Instagram on Android!</h1>
+      <p class="lead">
+        Unlock high-resolution 1080p media downloading, stealth ghost mode, authentic iOS story fonts with Apple emojis, and 100% ad-free browsing.
+      </p>
 
-<div class="toast" id="toast"><span class="dotp"></span><span id="toastText">Theme changed</span></div>
+      <div class="hero-actions">
+        <a href="#download" class="cta-primary">
+          <span>Download APK</span>
+        </a>
+        <a href="#simulator" class="cta-secondary">
+          <span>📱 Try iOS Simulator</span>
+        </a>
+      </div>
 
-<script>
-  const themeNames = {
-    nova: 'Nova Purple',
-    pulse: 'Pulse Teal',
-    ember: 'Ember Orange',
-    depth: 'Ocean Depth'
-  };
+      <div class="version-pill">LATEST RELEASE: V15.70 · BASE 439.0.0.38.89</div>
 
-  function setTheme(name){
-    document.body.setAttribute('data-theme', name);
-    document.querySelectorAll('.theme-option').forEach(el => {
-      el.classList.toggle('active', el.dataset.themeChoice === name);
-    });
-    showToast(themeNames[name] + ' theme applied');
-    closeThemePanel();
-  }
+      <div class="stats">
+        <div class="stat-box">
+          <div class="stat-num pink">1.1M+</div>
+          <div class="stat-label">Total Downloads</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-num pink">4.8/5</div>
+          <div class="stat-label">User Rating</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-num pink">22K+</div>
+          <div class="stat-label">Telegram Fans</div>
+        </div>
+      </div>
+    </section>
 
-  function toggleThemePanel(){
-    document.getElementById('themePanel').classList.toggle('open');
-  }
-  function closeThemePanel(){
-    document.getElementById('themePanel').classList.remove('open');
-  }
+    <!-- TOOL 1: GHOST MODE & PRIVACY CENTER -->
+    <section id="privacy-hub" class="tool-section">
+      <div class="privacy-hub-card">
+        <div class="tool-header">
+          <div class="eyebrow"><span class="dot"></span> Stealth Console</div>
+          <h2 class="tool-title">InstaPro Ghost Mode & Privacy Center</h2>
+          <p class="tool-subtitle">
+            Configure your invisible presence. All privacy preferences are persistent and simulated in real time.
+          </p>
+        </div>
 
-  let toastTimer;
-  function showToast(msg){
-    const toast = document.getElementById('toast');
-    document.getElementById('toastText').textContent = msg;
-    toast.classList.add('show');
-    clearTimeout(toastTimer);
-    toastTimer = setTimeout(() => toast.classList.remove('show'), 1800);
-  }
+        <div class="toggles-list">
+          <div class="toggle-item">
+            <div class="toggle-info">
+              <div class="toggle-icon">👁️</div>
+              <div>
+                <div class="toggle-title">Don't Mark Stories as Seen</div>
+                <div class="toggle-desc">View friends' and public stories without appearing in their viewer list</div>
+              </div>
+            </div>
+            <label class="ios-switch">
+              <input type="checkbox" class="privacy-toggle-input" data-key="ghost_stories" checked />
+              <span class="ios-slider"></span>
+            </label>
+          </div>
 
-  function openMenu(){
-    document.getElementById('drawer').classList.add('open');
-    document.getElementById('overlay').classList.add('open');
-    document.body.style.overflow = 'hidden';
-  }
-  function closeMenu(){
-    document.getElementById('drawer').classList.remove('open');
-    document.getElementById('overlay').classList.remove('open');
-    document.body.style.overflow = '';
-  }
-  document.addEventListener('keydown', function(e){
-    if(e.key === 'Escape'){ closeMenu(); closeThemePanel(); }
-  });
-  document.addEventListener('click', function(e){
-    const panel = document.getElementById('themePanel');
-    const btn = document.getElementById('themeBtn');
-    if(panel.classList.contains('open') && !panel.contains(e.target) && !btn.contains(e.target)){
-      closeThemePanel();
-    }
-  });
-</script>
+          <div class="toggle-item">
+            <div class="toggle-info">
+              <div class="toggle-icon">💬</div>
+              <div>
+                <div class="toggle-title">Hide Read Status in Direct Messages</div>
+                <div class="toggle-desc">Read DMs freely without sending 'Seen' receipt or blue tick to sender</div>
+              </div>
+            </div>
+            <label class="ios-switch">
+              <input type="checkbox" class="privacy-toggle-input" data-key="ghost_dms" checked />
+              <span class="ios-slider"></span>
+            </label>
+          </div>
+
+          <div class="toggle-item">
+            <div class="toggle-info">
+              <div class="toggle-icon">✍️</div>
+              <div>
+                <div class="toggle-title">Hide 'Typing...' Status in Chat</div>
+                <div class="toggle-desc">Keep your typing indicator hidden when composing messages in Direct</div>
+              </div>
+            </div>
+            <label class="ios-switch">
+              <input type="checkbox" class="privacy-toggle-input" data-key="ghost_typing" checked />
+              <span class="ios-slider"></span>
+            </label>
+          </div>
+
+          <div class="toggle-item">
+            <div class="toggle-info">
+              <div class="toggle-icon">🔴</div>
+              <div>
+                <div class="toggle-title">Stealth Live Stream Join</div>
+                <div class="toggle-desc">Join Instagram live broadcasts without broadcasting 'joined' announcement</div>
+              </div>
+            </div>
+            <label class="ios-switch">
+              <input type="checkbox" class="privacy-toggle-input" data-key="ghost_live" checked />
+              <span class="ios-slider"></span>
+            </label>
+          </div>
+
+          <div class="toggle-item">
+            <div class="toggle-info">
+              <div class="toggle-icon">🗑️</div>
+              <div>
+                <div class="toggle-title">Anti-Delete Messages (Unsent DMs)</div>
+                <div class="toggle-desc">Preserve recalled messages and see what someone deleted after sending</div>
+              </div>
+            </div>
+            <label class="ios-switch">
+              <input type="checkbox" class="privacy-toggle-input" data-key="anti_delete" checked />
+              <span class="ios-slider"></span>
+            </label>
+          </div>
+
+          <div class="toggle-item">
+            <div class="toggle-info">
+              <div class="toggle-icon">🚫</div>
+              <div>
+                <div class="toggle-title">100% Ad-Free Feed & Stories</div>
+                <div class="toggle-desc">Completely eliminate sponsored posts, commercial banners, and shop cards</div>
+              </div>
+            </div>
+            <label class="ios-switch">
+              <input type="checkbox" class="privacy-toggle-input" data-key="ad_block" checked />
+              <span class="ios-slider"></span>
+            </label>
+          </div>
+
+          <div class="toggle-item">
+            <div class="toggle-info">
+              <div class="toggle-icon">⚡</div>
+              <div>
+                <div class="toggle-title">60 FPS Ultra-HD Media Uploads</div>
+                <div class="toggle-desc">Bypass Instagram compression algorithms for crystal clear photos and reels</div>
+              </div>
+            </div>
+            <label class="ios-switch">
+              <input type="checkbox" class="privacy-toggle-input" data-key="hd_quality" checked />
+              <span class="ios-slider"></span>
+            </label>
+          </div>
+        </div>
+
+        <button class="pin-test-btn" id="testPinBtn">
+          <span>🔒 Test / Configure App PIN Lock</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- TOOL 4: LIVE iOS INSTAGRAM SIMULATOR -->
+    <section id="simulator" class="tool-section">
+      <div class="tool-header">
+        <div class="eyebrow"><span class="dot"></span> Interactive Simulation</div>
+        <h2 class="tool-title">Live iOS Instagram App Simulator</h2>
+        <p class="tool-subtitle">
+          Experience the authentic iOS interface with InstaPro features: tap stories to view anonymously, double-tap post to heart, and test the 1-tap download button!
+        </p>
+      </div>
+
+      <div class="simulator-wrap">
+        <div class="iphone-frame">
+          <!-- Dynamic Island -->
+          <div class="iphone-status-bar">
+            <span>9:41</span>
+            <div class="dynamic-island">
+              <div class="island-lens"></div>
+              <div class="island-sensor"></div>
+            </div>
+            <span>5G 􀛨</span>
+          </div>
+
+          <!-- Top iOS App Navigation -->
+          <div class="sim-app-header">
+            <div class="sim-logo">
+              Instagram <span>PRO</span>
+            </div>
+            <div class="sim-header-icons">
+              <span title="Notifications">🤍</span>
+              <div class="sim-dm-icon" title="Direct Messages">
+                <span>💬</span>
+                <span class="sim-unread-badge">3</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Active Stories Tray -->
+          <div class="sim-stories-tray" id="simStoriesTray">
+            <!-- Rendered by JavaScript -->
+          </div>
+
+          <!-- In-Feed Post -->
+          <div class="sim-post-card">
+            <div class="sim-post-author">
+              <div class="sim-author-left">
+                <div class="sim-author-avatar">
+                  <img src="/Screenshots/ncy.png" alt="Author" />
+                </div>
+                <div>
+                  <div class="sim-author-handle">mr._rakshit_2.0 <span style="color:#38bdf8; font-size:12px;">✓</span></div>
+                  <div style="font-size:10px; color:#a1a1aa;">Original audio · Trending</div>
+                </div>
+              </div>
+              <div style="color:#a1a1aa; font-weight:700; cursor:pointer;">•••</div>
+            </div>
+
+            <!-- Post Media with Double-Tap to Heart -->
+            <div class="sim-post-media" id="simPostMedia">
+              <img src="/Screenshots/InstaPro-01.jpg" alt="Post Photo" />
+              <div class="sim-heart-pop" id="simHeartPop">❤️</div>
+            </div>
+
+            <!-- Action Bar featuring InstaPro signature Download Button -->
+            <div class="sim-post-actions">
+              <div class="sim-actions-left">
+                <span class="sim-action-btn" id="simHeartBtn">🤍</span>
+                <span class="sim-action-btn">💬</span>
+                <span class="sim-action-btn">✈️</span>
+              </div>
+
+              <!-- InstaPro Download Button -->
+              <button class="sim-instapro-dl-btn" id="simInstaproDlBtn" title="InstaPro 1-Tap Media Downloader">
+                <span>📥</span>
+                <span>Download</span>
+              </button>
+            </div>
+
+            <div class="sim-post-info">
+              <div class="sim-likes-count" id="simLikesCount">14,829 likes</div>
+              <div class="sim-post-caption">
+                <span>mr._rakshit_2.0</span> Latest InstaPro v15.70 iOS experience for Android! Enjoy smooth scrolling, ghost viewing, and custom fonts.
+              </div>
+              <div style="font-size:11px; color:#71717a; margin-top:6px;">View all 384 comments · 2 hours ago</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- SCREENSHOTS GALLERY -->
+    <section id="screenshots" class="screenshots-section">
+      <div class="screenshots-header">
+        <div class="eyebrow"><span class="dot"></span> Screenshots</div>
+        <h2>See It in Action</h2>
+        <p>Tap any screenshot to expand into full resolution with feature breakdown</p>
+      </div>
+
+      <div class="screenshots-scroll">
+        <div class="screenshot-frame" title="Click to view full size">
+          <img src="/Screenshots/InstaPro-01.jpg" alt="InstaPro Screenshot 1" loading="lazy" />
+          <div class="screenshot-overlay-badge">🔍 Media Downloader</div>
+        </div>
+        <div class="screenshot-frame" title="Click to view full size">
+          <img src="/Screenshots/InstaPro-02.jpg" alt="InstaPro Screenshot 2" loading="lazy" />
+          <div class="screenshot-overlay-badge">🔍 Ghost Mode</div>
+        </div>
+        <div class="screenshot-frame" title="Click to view full size">
+          <img src="/Screenshots/InstaPro-03.jpg" alt="InstaPro Screenshot 3" loading="lazy" />
+          <div class="screenshot-overlay-badge">🔍 iOS Fonts</div>
+        </div>
+        <div class="screenshot-frame" title="Click to view full size">
+          <img src="/Screenshots/InstaPro-04.jpg" alt="InstaPro Screenshot 4" loading="lazy" />
+          <div class="screenshot-overlay-badge">🔍 Anti-Delete</div>
+        </div>
+        <div class="screenshot-frame" title="Click to view full size">
+          <img src="/Screenshots/InstaPro-05.jpg" alt="InstaPro Screenshot 5" loading="lazy" />
+          <div class="screenshot-overlay-badge">🔍 1080p Export</div>
+        </div>
+        <div class="screenshot-frame" title="Click to view full size">
+          <img src="/Screenshots/InstaPro-06.jpg" alt="InstaPro Screenshot 6" loading="lazy" />
+          <div class="screenshot-overlay-badge">🔍 App PIN Lock</div>
+        </div>
+        <div class="screenshot-frame" title="Click to view full size">
+          <img src="/Screenshots/InstaPro-07.jpg" alt="InstaPro Screenshot 7" loading="lazy" />
+          <div class="screenshot-overlay-badge">🔍 Ad-Free Feed</div>
+        </div>
+        <div class="screenshot-frame" title="Click to view full size">
+          <img src="/Screenshots/InstaPro-08.jpg" alt="InstaPro Screenshot 8" loading="lazy" />
+          <div class="screenshot-overlay-badge">🔍 Video Scrubber</div>
+        </div>
+        <div class="screenshot-frame" title="Click to view full size">
+          <img src="/Screenshots/InstaPro-09.jpg" alt="InstaPro Screenshot 9" loading="lazy" />
+          <div class="screenshot-overlay-badge">🔍 DP Zoom</div>
+        </div>
+        <div class="screenshot-frame" title="Click to view full size">
+          <img src="/Screenshots/InstaPro-010.jpg" alt="InstaPro Screenshot 10" loading="lazy" />
+          <div class="screenshot-overlay-badge">🔍 AMOLED Themes</div>
+        </div>
+        <div class="screenshot-frame" title="Click to view full size">
+          <img src="/Screenshots/InstaPro-011.jpg" alt="InstaPro Screenshot 11" loading="lazy" />
+          <div class="screenshot-overlay-badge">🔍 Multi-Account</div>
+        </div>
+        <div class="screenshot-frame" title="Click to view full size">
+          <img src="/Screenshots/InstaPro-012.jpg" alt="InstaPro Screenshot 12" loading="lazy" />
+          <div class="screenshot-overlay-badge">🔍 Speed Engine</div>
+        </div>
+      </div>
+
+      <div class="scroll-hint">swipe or scroll horizontally to explore all 12 views</div>
+    </section>
+
+    <!-- SPEED TUNING & CHANGELOG -->
+    <section id="tuner">
+      <div class="eyebrow"><span class="dot"></span> High Performance</div>
+      <h2 style="font-size:32px; margin-bottom:12px;">Refined for Maximum Speed</h2>
+      <p style="color:var(--text-dim); margin-bottom:28px; max-width:680px;">
+        InstaPro combines the visual finesse of iOS with ultra-low latency engineering. Up to 40% less memory utilization than standard Instagram while running on older and flagship Android smartphones.
+      </p>
+
+      <div class="tool-card" style="padding:28px;">
+        <div style="font-size:12px; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; color:var(--orange); margin-bottom:16px;">
+          What's New in v15.70
+        </div>
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:12px;">
+          <div style="display:flex; align-items:center; gap:10px; font-size:14px; color:var(--text-dim);"><span style="color:var(--green); font-weight:700;">✓</span> Stealth Ghost Mode for Stories & DMs</div>
+          <div style="display:flex; align-items:center; gap:10px; font-size:14px; color:var(--text-dim);"><span style="color:var(--green); font-weight:700;">✓</span> [Base Update] Upgraded to 439.0.0.38.89</div>
+          <div style="display:flex; align-items:center; gap:10px; font-size:14px; color:var(--text-dim);"><span style="color:var(--green); font-weight:700;">✓</span> [Added] Custom iOS Story Fonts & Emojis</div>
+          <div style="display:flex; align-items:center; gap:10px; font-size:14px; color:var(--text-dim);"><span style="color:var(--green); font-weight:700;">✓</span> [ReAdded] Profile Post 1-Tap Download Button</div>
+          <div style="display:flex; align-items:center; gap:10px; font-size:14px; color:var(--text-dim);"><span style="color:var(--green); font-weight:700;">✓</span> [Enabled] Picture-in-Picture (PiP) Video Mode</div>
+          <div style="display:flex; align-items:center; gap:10px; font-size:14px; color:var(--text-dim);"><span style="color:var(--green); font-weight:700;">✓</span> [Fixed] Download Button Inconsistencies</div>
+          <div style="display:flex; align-items:center; gap:10px; font-size:14px; color:var(--text-dim);"><span style="color:var(--green); font-weight:700;">✓</span> [Fixed] App Restart on Feature Toggle</div>
+          <div style="display:flex; align-items:center; gap:10px; font-size:14px; color:var(--text-dim);"><span style="color:var(--green); font-weight:700;">✓</span> [Fixed] Memory Leaks & Stability Crashes</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TOOL 5: APK DOWNLOAD STATION -->
+    <section id="download" class="tool-section">
+      <div class="apk-hub-card">
+        <div class="tool-header">
+          <div class="eyebrow"><span class="dot"></span> Official Package Hub</div>
+          <h2 class="tool-title">Download InstaPro v15.70 APK</h2>
+          <p class="tool-subtitle">
+            Choose your preferred package architecture. Clean, malware-free, and verified by Rakshittips.
+          </p>
+        </div>
+
+        <!-- Package Selector Tabs -->
+        <div class="package-tabs">
+          <button class="package-tab-btn active" id="pkgCloneBtn">
+            <div class="pkg-title">📦 Package 1: Clone</div>
+            <div class="pkg-sub">com.instapro.android · Dual App (Runs alongside official Instagram)</div>
+          </button>
+          <button class="package-tab-btn" id="pkgUncloneBtn">
+            <div class="pkg-title">📦 Package 2: Unclone</div>
+            <div class="pkg-sub">com.instagram.android · Replaces standard Instagram app</div>
+          </button>
+        </div>
+
+        <!-- Specs Grid -->
+        <div class="apk-specs-grid">
+          <div class="spec-box">
+            <div class="spec-label">Package Name</div>
+            <div class="spec-value" id="apkPkgName">com.instapro.android</div>
+          </div>
+          <div class="spec-box">
+            <div class="spec-label">File Size</div>
+            <div class="spec-value" id="apkFileSize">68.4 MB</div>
+          </div>
+          <div class="spec-box">
+            <div class="spec-label">Android Version</div>
+            <div class="spec-value">6.0+ to Android 15</div>
+          </div>
+          <div class="spec-box">
+            <div class="spec-label">Root Required</div>
+            <div class="spec-value" style="color:var(--green);">No (Zero Root)</div>
+          </div>
+        </div>
+
+        <!-- Checksum Hash Box -->
+        <div class="hash-verify-box">
+          <span>SHA-256: <b id="apkHashText">e9b72f104d884a9238c91a041fec2284918e77c1</b></span>
+          <button class="hash-copy-btn" id="copyHashBtn">Copy Hash</button>
+        </div>
+
+        <!-- Download Buttons -->
+        <div style="display:flex; flex-direction:column; gap:12px; max-width:440px; margin:0 auto;">
+          <button class="cta-primary" id="startApkDlBtn">
+            <span>Download APK (Clone v15.70)</span>
+          </button>
+          <a href="https://t.me/Mr_Rakshit_2_0" target="_blank" rel="noopener" class="cta-secondary">
+            <span>✈️ Fast Telegram Mirror Link</span>
+          </a>
+        </div>
+
+        <!-- FAQ Accordion -->
+        <div class="faq-list">
+          <div class="faq-item">
+            <div class="faq-header">
+              <span>How do I install the APK on Android 14 / 15?</span>
+              <span class="chevron">▼</span>
+            </div>
+            <div class="faq-content">
+              Download the APK file, open it from your Notifications or Downloads folder, and grant the prompt: 'Allow installation from this source'. Once installed, open InstaPro and log in with your credentials.
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-header">
+              <span>Is my account safe from bans?</span>
+              <span class="chevron">▼</span>
+            </div>
+            <div class="faq-content">
+              Yes, InstaPro uses anti-ban hooks and mimics the official Instagram API requests directly, ensuring 100% account safety without triggering abnormal behavior flags.
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-header">
+              <span>How do I open the hidden InstaPro settings?</span>
+              <span class="chevron">▼</span>
+            </div>
+            <div class="faq-content">
+              Go to your profile tab in the app and either long-press the top hamburger icon (☰) or click on the gear icon to reveal the complete InstaPro stealth & customization control panel.
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- SUPPORT / DONATE SECTION -->
+    <section id="support" class="tool-section" style="padding-top: 20px;">
+      <div class="tool-card" style="text-align: center;">
+        <div style="width:56px; height:56px; border-radius:16px; background:var(--grad); display:flex; align-items:center; justify-content:center; font-size:24px; margin:0 auto 16px; box-shadow:0 8px 24px rgba(217,70,239,0.28);">
+          ❤️
+        </div>
+        <h2 style="font-size:26px; margin-bottom:8px;">Support the Developer</h2>
+        <p style="color:var(--text-dim); max-width:440px; margin:0 auto 24px; font-size:14px;">
+          InstaPro is developed and maintained independently in free time by Rakshittips. Your support keeps servers online and updates flowing free of charge!
+        </p>
+
+        <div style="display:flex; flex-direction:column; gap:12px; max-width:340px; margin:0 auto;">
+          <a href="https://rakshittips.github.io/Rakshittips/DonateSupport.html" target="_blank" rel="noopener" class="action-dl-btn secondary" style="justify-content:space-between;">
+            <div style="display:flex; align-items:center; gap:10px;">
+              <span style="background:#22c55e; width:28px; height:28px; border-radius:8px; display:flex; align-items:center; justify-content:center; color:#fff; font-weight:700;">₹</span>
+              <div style="text-align:left;">
+                <div style="font-weight:700; font-size:13px;">UPI / QR (India)</div>
+                <div style="font-size:11px; color:var(--text-faint);">GPay, PhonePe, Paytm</div>
+              </div>
+            </div>
+            <span>›</span>
+          </a>
+
+          <a href="https://t.me/Mr_Rakshit_2_0" target="_blank" rel="noopener" class="action-dl-btn secondary" style="justify-content:space-between;">
+            <div style="display:flex; align-items:center; gap:10px;">
+              <span style="background:#26a5e4; width:28px; height:28px; border-radius:8px; display:flex; align-items:center; justify-content:center; color:#fff;">✈️</span>
+              <div style="text-align:left;">
+                <div style="font-weight:700; font-size:13px;">Telegram DM</div>
+                <div style="font-size:11px; color:var(--text-faint);">Crypto / PayPal / Other</div>
+              </div>
+            </div>
+            <span>›</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- TELEGRAM & LINKS -->
+    <section id="join" style="text-align: center; padding-top: 0;">
+      <div style="padding: 44px 20px; border-radius: 28px; background: radial-gradient(ellipse 70% 50% at 50% 50%, var(--glow1) 0%, transparent 70%);">
+        <h2 style="font-size: 28px; margin-bottom: 12px;">Join Official Rakshittips Community</h2>
+        <p style="color:var(--text-dim); margin-bottom: 24px; font-size: 14px;">
+          Get instantaneous update alerts, beta releases, and exclusive themes directly on Telegram.
+        </p>
+        <div style="display:flex; flex-direction:column; gap:12px; max-width:280px; margin:0 auto;">
+          <a href="https://t.me/Mr_Rakshit_2_0" target="_blank" rel="noopener" class="cta-primary">
+            <span>✈️ Join Telegram Channel</span>
+          </a>
+          <button onclick="window.instapro.openDevModal()" class="cta-secondary">
+            <span>👨‍💻 About Developer Profile</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>
+      Crafted with precision by <a href="https://rakshittips.github.io/Rakshittips/index.html" target="_blank" rel="noopener" style="color:var(--purple); font-weight:700;">Rakshittips</a><br>
+      © 2026 Mr_Rakshit_2.0 · Built with ❤️ for Android Users Worldwide
+    </p>
+  </footer>
+
+  <!-- ======================================================================
+       MODALS
+       ====================================================================== -->
+
+  <!-- Lightbox Modal -->
+  <div class="modal-overlay" id="lightboxModal">
+    <div class="modal-dialog lightbox-dialog">
+      <button class="modal-close-btn" onclick="window.instapro.closeLightbox()">✕</button>
+      <div class="lightbox-img-wrap">
+        <img id="lbImg" src="/Screenshots/InstaPro-01.jpg" alt="Enlarged Screenshot" />
+      </div>
+      <div class="lightbox-controls">
+        <button class="lightbox-nav-btn" id="lbPrevBtn">‹ Prev</button>
+        <div class="lightbox-meta">
+          <div id="lbTitle" style="font-weight:700; font-size:15px; color:#fff;">Title</div>
+          <div id="lbDesc" style="font-size:12px; color:var(--text-dim);">Description</div>
+          <div id="lbCount" style="font-size:11px; color:var(--text-faint); margin-top:2px;">1 of 12</div>
+        </div>
+        <button class="lightbox-nav-btn" id="lbNextBtn">Next ›</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- PIN Lock Keypad Modal -->
+  <div class="modal-overlay" id="pinModal">
+    <div class="modal-dialog pin-dialog">
+      <button class="modal-close-btn" onclick="window.instapro.closePinModal()">✕</button>
+      <div style="font-size:32px; margin-bottom:8px;">🔒</div>
+      <h3 style="font-size:18px; margin-bottom:4px;">InstaPro App Lock</h3>
+      <p style="font-size:12px; color:var(--text-dim);">Enter any 4 digits to test instant unlock</p>
+
+      <div class="pin-dots">
+        <div class="pin-dot" id="pinDot1"></div>
+        <div class="pin-dot" id="pinDot2"></div>
+        <div class="pin-dot" id="pinDot3"></div>
+        <div class="pin-dot" id="pinDot4"></div>
+      </div>
+
+      <div class="keypad-grid">
+        <button class="key-btn" onclick="window.instapro.pressPinKey('1')">1</button>
+        <button class="key-btn" onclick="window.instapro.pressPinKey('2')">2</button>
+        <button class="key-btn" onclick="window.instapro.pressPinKey('3')">3</button>
+        <button class="key-btn" onclick="window.instapro.pressPinKey('4')">4</button>
+        <button class="key-btn" onclick="window.instapro.pressPinKey('5')">5</button>
+        <button class="key-btn" onclick="window.instapro.pressPinKey('6')">6</button>
+        <button class="key-btn" onclick="window.instapro.pressPinKey('7')">7</button>
+        <button class="key-btn" onclick="window.instapro.pressPinKey('8')">8</button>
+        <button class="key-btn" onclick="window.instapro.pressPinKey('9')">9</button>
+        <div style="width:64px; height:64px;"></div>
+        <button class="key-btn" onclick="window.instapro.pressPinKey('0')">0</button>
+        <button class="key-btn" style="font-size:18px;" onclick="window.instapro.deletePinDigit()">⌫</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Story Viewer Modal -->
+  <div class="modal-overlay" id="storyViewerModal">
+    <div class="modal-dialog story-viewer-dialog">
+      <div>
+        <!-- Countdown Progress Bar -->
+        <div style="width:100%; height:3px; background:rgba(255,255,255,0.3); border-radius:2px; overflow:hidden; margin-bottom:12px;">
+          <div id="storyViewerProgressBar" style="width:0%; height:100%; background:#fff;"></div>
+        </div>
+
+        <div class="story-viewer-header">
+          <div style="display:flex; align-items:center; gap:8px;">
+            <img src="/Screenshots/ncy.png" style="width:30px; height:30px; border-radius:50%;" alt="User" />
+            <span id="storyViewerUser" style="font-size:13px; font-weight:700;">@rakshittips</span>
+            <span style="font-size:11px; opacity:0.6;">Ghost Mode Active 👁️</span>
+          </div>
+          <button style="background:transparent; border:none; color:#fff; font-size:18px; cursor:pointer;" onclick="window.instapro.closeStoryViewer()">✕</button>
+        </div>
+      </div>
+
+      <!-- Story Media -->
+      <div style="flex:1; display:flex; align-items:center; justify-content:center; padding:10px 0;">
+        <img id="storyViewerImg" src="/Screenshots/InstaPro-01.jpg" style="max-height:100%; max-width:100%; border-radius:18px; object-fit:contain;" alt="Story" />
+      </div>
+
+      <!-- Story In-App Download Bar -->
+      <div style="display:flex; align-items:center; justify-content:space-between; padding-top:10px;">
+        <div style="font-size:12px; color:rgba(255,255,255,0.7);">Anonymous view mode</div>
+        <button class="story-dl-banner-btn" onclick="window.instapro.downloadActiveStory()">
+          📥 Download Story
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Developer Modal -->
+  <div class="modal-overlay" id="devModal">
+    <div class="modal-dialog dev-dialog">
+      <button class="modal-close-btn" onclick="window.instapro.closeDevModal()">✕</button>
+      <div class="dev-avatar-wrap">
+        <img src="/Screenshots/ncy.png" alt="Rakshittips" />
+      </div>
+      <h3 style="font-size:20px; margin-bottom:4px;">Rakshittips (Mr_Rakshit_2.0)</h3>
+      <div style="font-size:12px; color:var(--purple); font-weight:700; margin-bottom:12px;">Verified Android Mod Developer</div>
+      <p style="font-size:13px; color:var(--text-dim); line-height:1.6;">
+        Creator and maintainer of InstaPro iOS-Style for Android. Dedicated to bringing high-performance privacy mods, uncompressed media downloading, and Apple typography to millions of Android devices worldwide.
+      </p>
+
+      <div class="dev-stats-row">
+        <div class="dev-stat-item">
+          <div class="num">v15.70</div>
+          <div class="lbl">Latest Build</div>
+        </div>
+        <div class="dev-stat-item">
+          <div class="num">1.1M+</div>
+          <div class="lbl">Downloads</div>
+        </div>
+        <div class="dev-stat-item">
+          <div class="num">22K+</div>
+          <div class="lbl">Telegram</div>
+        </div>
+      </div>
+
+      <div style="display:flex; flex-direction:column; gap:8px;">
+        <a href="https://t.me/Mr_Rakshit_2_0" target="_blank" rel="noopener" class="action-dl-btn primary">
+          <span>✈️ Official Telegram Channel</span>
+        </a>
+        <a href="https://www.instagram.com/mr._rakshit_2.0" target="_blank" rel="noopener" class="action-dl-btn secondary">
+          <span>📸 Instagram: @mr._rakshit_2.0</span>
+        </a>
+        <a href="https://github.com/Rakshittips" target="_blank" rel="noopener" class="action-dl-btn secondary">
+          <span>🐙 GitHub: @Rakshittips</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Interactive Toast -->
+  <div class="toast" id="toast">
+    <span class="dotp"></span>
+    <span id="toastText">Action completed</span>
+  </div>
+
+  <!-- Modular App Script -->
+  <script type="module" src="/src/app.js"></script>
+
 </body>
 </html>

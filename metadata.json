@@ -1,0 +1,8 @@
+{
+  "name": "InstaGram — iOS-Style InstaPro",
+  "description": "Experience Instagram Pro with iOS-style UI for Android, privacy features, media downloading, ad-free browsing, and exclusive customization options.",
+  "capabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ],
+  "permissions": []
+}
