@@ -34,19 +34,12 @@
 
     <!-- Desktop Nav Links -->
     <div class="nav-desktop-links">
-      <a href="#privacy-hub" class="nav-link">Ghost Mode</a>
-      <a href="#simulator" class="nav-link">iOS Simulator</a>
       <a href="#screenshots" class="nav-link">Screenshots</a>
+      <a href="#tuner" class="nav-link">Performance</a>
       <a href="#download" class="nav-link">Download APK</a>
     </div>
 
     <div class="nav-actions">
-      <!-- Stealth Mode Status Indicator -->
-      <div class="stealth-pill" id="navStealthBadge" title="Ghost Mode active in InstaPro">
-        <span class="stealth-dot"></span>
-        <span>Ghost Mode Active</span>
-      </div>
-
       <!-- Theme Switcher Button -->
       <div class="theme-btn" id="themeBtn" onclick="window.instapro.toggleThemePanel()" title="Change Color Theme">
         <div class="swatch"></div>
@@ -104,12 +97,6 @@
       <div class="brand-name">Menu</div>
       <div class="nav-btn" style="width:36px; height:36px;" onclick="window.instapro.closeMenu()">✕</div>
     </div>
-    <a href="#privacy-hub" class="drawer-link" onclick="window.instapro.closeMenu()">
-      <span>👁️ Stealth Ghost Mode</span><span class="arrow">›</span>
-    </a>
-    <a href="#simulator" class="drawer-link" onclick="window.instapro.closeMenu()">
-      <span>📱 Live iOS Simulator</span><span class="arrow">›</span>
-    </a>
     <a href="#screenshots" class="drawer-link" onclick="window.instapro.closeMenu()">
       <span>🖼️ App Screenshots</span><span class="arrow">›</span>
     </a>
@@ -141,8 +128,8 @@
         <a href="#download" class="cta-primary">
           <span>Download APK</span>
         </a>
-        <a href="#simulator" class="cta-secondary">
-          <span>📱 Try iOS Simulator</span>
+        <a href="#screenshots" class="cta-secondary">
+          <span>🖼️ App Screenshots</span>
         </a>
       </div>
 
@@ -160,213 +147,6 @@
         <div class="stat-box">
           <div class="stat-num pink">22K+</div>
           <div class="stat-label">Telegram Fans</div>
-        </div>
-      </div>
-    </section>
-
-    <!-- TOOL 1: GHOST MODE & PRIVACY CENTER -->
-    <section id="privacy-hub" class="tool-section">
-      <div class="privacy-hub-card">
-        <div class="tool-header">
-          <div class="eyebrow"><span class="dot"></span> Stealth Console</div>
-          <h2 class="tool-title">InstaPro Ghost Mode & Privacy Center</h2>
-          <p class="tool-subtitle">
-            Configure your invisible presence. All privacy preferences are persistent and simulated in real time.
-          </p>
-        </div>
-
-        <div class="toggles-list">
-          <div class="toggle-item">
-            <div class="toggle-info">
-              <div class="toggle-icon">👁️</div>
-              <div>
-                <div class="toggle-title">Don't Mark Stories as Seen</div>
-                <div class="toggle-desc">View friends' and public stories without appearing in their viewer list</div>
-              </div>
-            </div>
-            <label class="ios-switch">
-              <input type="checkbox" class="privacy-toggle-input" data-key="ghost_stories" checked />
-              <span class="ios-slider"></span>
-            </label>
-          </div>
-
-          <div class="toggle-item">
-            <div class="toggle-info">
-              <div class="toggle-icon">💬</div>
-              <div>
-                <div class="toggle-title">Hide Read Status in Direct Messages</div>
-                <div class="toggle-desc">Read DMs freely without sending 'Seen' receipt or blue tick to sender</div>
-              </div>
-            </div>
-            <label class="ios-switch">
-              <input type="checkbox" class="privacy-toggle-input" data-key="ghost_dms" checked />
-              <span class="ios-slider"></span>
-            </label>
-          </div>
-
-          <div class="toggle-item">
-            <div class="toggle-info">
-              <div class="toggle-icon">✍️</div>
-              <div>
-                <div class="toggle-title">Hide 'Typing...' Status in Chat</div>
-                <div class="toggle-desc">Keep your typing indicator hidden when composing messages in Direct</div>
-              </div>
-            </div>
-            <label class="ios-switch">
-              <input type="checkbox" class="privacy-toggle-input" data-key="ghost_typing" checked />
-              <span class="ios-slider"></span>
-            </label>
-          </div>
-
-          <div class="toggle-item">
-            <div class="toggle-info">
-              <div class="toggle-icon">🔴</div>
-              <div>
-                <div class="toggle-title">Stealth Live Stream Join</div>
-                <div class="toggle-desc">Join Instagram live broadcasts without broadcasting 'joined' announcement</div>
-              </div>
-            </div>
-            <label class="ios-switch">
-              <input type="checkbox" class="privacy-toggle-input" data-key="ghost_live" checked />
-              <span class="ios-slider"></span>
-            </label>
-          </div>
-
-          <div class="toggle-item">
-            <div class="toggle-info">
-              <div class="toggle-icon">🗑️</div>
-              <div>
-                <div class="toggle-title">Anti-Delete Messages (Unsent DMs)</div>
-                <div class="toggle-desc">Preserve recalled messages and see what someone deleted after sending</div>
-              </div>
-            </div>
-            <label class="ios-switch">
-              <input type="checkbox" class="privacy-toggle-input" data-key="anti_delete" checked />
-              <span class="ios-slider"></span>
-            </label>
-          </div>
-
-          <div class="toggle-item">
-            <div class="toggle-info">
-              <div class="toggle-icon">🚫</div>
-              <div>
-                <div class="toggle-title">100% Ad-Free Feed & Stories</div>
-                <div class="toggle-desc">Completely eliminate sponsored posts, commercial banners, and shop cards</div>
-              </div>
-            </div>
-            <label class="ios-switch">
-              <input type="checkbox" class="privacy-toggle-input" data-key="ad_block" checked />
-              <span class="ios-slider"></span>
-            </label>
-          </div>
-
-          <div class="toggle-item">
-            <div class="toggle-info">
-              <div class="toggle-icon">⚡</div>
-              <div>
-                <div class="toggle-title">60 FPS Ultra-HD Media Uploads</div>
-                <div class="toggle-desc">Bypass Instagram compression algorithms for crystal clear photos and reels</div>
-              </div>
-            </div>
-            <label class="ios-switch">
-              <input type="checkbox" class="privacy-toggle-input" data-key="hd_quality" checked />
-              <span class="ios-slider"></span>
-            </label>
-          </div>
-        </div>
-
-        <button class="pin-test-btn" id="testPinBtn">
-          <span>🔒 Test / Configure App PIN Lock</span>
-        </button>
-      </div>
-    </section>
-
-    <!-- TOOL 4: LIVE iOS INSTAGRAM SIMULATOR -->
-    <section id="simulator" class="tool-section">
-      <div class="tool-header">
-        <div class="eyebrow"><span class="dot"></span> Interactive Simulation</div>
-        <h2 class="tool-title">Live iOS Instagram App Simulator</h2>
-        <p class="tool-subtitle">
-          Experience the authentic iOS interface with InstaPro features: tap stories to view anonymously, double-tap post to heart, and test the 1-tap download button!
-        </p>
-      </div>
-
-      <div class="simulator-wrap">
-        <div class="iphone-frame">
-          <!-- Dynamic Island -->
-          <div class="iphone-status-bar">
-            <span>9:41</span>
-            <div class="dynamic-island">
-              <div class="island-lens"></div>
-              <div class="island-sensor"></div>
-            </div>
-            <span>5G 􀛨</span>
-          </div>
-
-          <!-- Top iOS App Navigation -->
-          <div class="sim-app-header">
-            <div class="sim-logo">
-              Instagram <span>PRO</span>
-            </div>
-            <div class="sim-header-icons">
-              <span title="Notifications">🤍</span>
-              <div class="sim-dm-icon" title="Direct Messages">
-                <span>💬</span>
-                <span class="sim-unread-badge">3</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Active Stories Tray -->
-          <div class="sim-stories-tray" id="simStoriesTray">
-            <!-- Rendered by JavaScript -->
-          </div>
-
-          <!-- In-Feed Post -->
-          <div class="sim-post-card">
-            <div class="sim-post-author">
-              <div class="sim-author-left">
-                <div class="sim-author-avatar">
-                  <img src="/Screenshots/ncy.png" alt="Author" />
-                </div>
-                <div>
-                  <div class="sim-author-handle">mr._rakshit_2.0 <span style="color:#38bdf8; font-size:12px;">✓</span></div>
-                  <div style="font-size:10px; color:#a1a1aa;">Original audio · Trending</div>
-                </div>
-              </div>
-              <div style="color:#a1a1aa; font-weight:700; cursor:pointer;">•••</div>
-            </div>
-
-            <!-- Post Media with Double-Tap to Heart -->
-            <div class="sim-post-media" id="simPostMedia">
-              <img src="/Screenshots/InstaPro-01.jpg" alt="Post Photo" />
-              <div class="sim-heart-pop" id="simHeartPop">❤️</div>
-            </div>
-
-            <!-- Action Bar featuring InstaPro signature Download Button -->
-            <div class="sim-post-actions">
-              <div class="sim-actions-left">
-                <span class="sim-action-btn" id="simHeartBtn">🤍</span>
-                <span class="sim-action-btn">💬</span>
-                <span class="sim-action-btn">✈️</span>
-              </div>
-
-              <!-- InstaPro Download Button -->
-              <button class="sim-instapro-dl-btn" id="simInstaproDlBtn" title="InstaPro 1-Tap Media Downloader">
-                <span>📥</span>
-                <span>Download</span>
-              </button>
-            </div>
-
-            <div class="sim-post-info">
-              <div class="sim-likes-count" id="simLikesCount">14,829 likes</div>
-              <div class="sim-post-caption">
-                <span>mr._rakshit_2.0</span> Latest InstaPro v15.70 iOS experience for Android! Enjoy smooth scrolling, ghost viewing, and custom fonts.
-              </div>
-              <div style="font-size:11px; color:#71717a; margin-top:6px;">View all 384 comments · 2 hours ago</div>
-            </div>
-          </div>
-
         </div>
       </div>
     </section>
@@ -469,16 +249,12 @@
           </p>
         </div>
 
-        <!-- Package Selector Tabs -->
-        <div class="package-tabs">
-          <button class="package-tab-btn active" id="pkgCloneBtn">
-            <div class="pkg-title">📦 Package 1: Clone</div>
-            <div class="pkg-sub">com.instapro.android · Dual App (Runs alongside official Instagram)</div>
-          </button>
-          <button class="package-tab-btn" id="pkgUncloneBtn">
-            <div class="pkg-title">📦 Package 2: Unclone</div>
-            <div class="pkg-sub">com.instagram.android · Replaces standard Instagram app</div>
-          </button>
+        <!-- Package Architecture Card -->
+        <div class="package-tabs" style="grid-template-columns: 1fr;">
+          <div class="package-tab-btn active" id="pkgCloneBtn" style="cursor: default;">
+            <div class="pkg-title">📦 Package: Clone (Official Dual App)</div>
+            <div class="pkg-sub">com.instapro.android · Runs smoothly alongside official Instagram</div>
+          </div>
         </div>
 
         <!-- Specs Grid -->
@@ -501,17 +277,11 @@
           </div>
         </div>
 
-        <!-- Checksum Hash Box -->
-        <div class="hash-verify-box">
-          <span>SHA-256: <b id="apkHashText">e9b72f104d884a9238c91a041fec2284918e77c1</b></span>
-          <button class="hash-copy-btn" id="copyHashBtn">Copy Hash</button>
-        </div>
-
         <!-- Download Buttons -->
         <div style="display:flex; flex-direction:column; gap:12px; max-width:440px; margin:0 auto;">
-          <button class="cta-primary" id="startApkDlBtn">
+          <a href="https://devuploads.com/xxsrmm1l7u72" target="_blank" rel="noopener" class="cta-primary" id="startApkDlBtn">
             <span>Download APK (Clone v15.70)</span>
-          </button>
+          </a>
           <a href="https://t.me/Mr_Rakshit_2_0" target="_blank" rel="noopener" class="cta-secondary">
             <span>✈️ Fast Telegram Mirror Link</span>
           </a>
@@ -637,72 +407,6 @@
           <div id="lbCount" style="font-size:11px; color:var(--text-faint); margin-top:2px;">1 of 12</div>
         </div>
         <button class="lightbox-nav-btn" id="lbNextBtn">Next ›</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- PIN Lock Keypad Modal -->
-  <div class="modal-overlay" id="pinModal">
-    <div class="modal-dialog pin-dialog">
-      <button class="modal-close-btn" onclick="window.instapro.closePinModal()">✕</button>
-      <div style="font-size:32px; margin-bottom:8px;">🔒</div>
-      <h3 style="font-size:18px; margin-bottom:4px;">InstaPro App Lock</h3>
-      <p style="font-size:12px; color:var(--text-dim);">Enter any 4 digits to test instant unlock</p>
-
-      <div class="pin-dots">
-        <div class="pin-dot" id="pinDot1"></div>
-        <div class="pin-dot" id="pinDot2"></div>
-        <div class="pin-dot" id="pinDot3"></div>
-        <div class="pin-dot" id="pinDot4"></div>
-      </div>
-
-      <div class="keypad-grid">
-        <button class="key-btn" onclick="window.instapro.pressPinKey('1')">1</button>
-        <button class="key-btn" onclick="window.instapro.pressPinKey('2')">2</button>
-        <button class="key-btn" onclick="window.instapro.pressPinKey('3')">3</button>
-        <button class="key-btn" onclick="window.instapro.pressPinKey('4')">4</button>
-        <button class="key-btn" onclick="window.instapro.pressPinKey('5')">5</button>
-        <button class="key-btn" onclick="window.instapro.pressPinKey('6')">6</button>
-        <button class="key-btn" onclick="window.instapro.pressPinKey('7')">7</button>
-        <button class="key-btn" onclick="window.instapro.pressPinKey('8')">8</button>
-        <button class="key-btn" onclick="window.instapro.pressPinKey('9')">9</button>
-        <div style="width:64px; height:64px;"></div>
-        <button class="key-btn" onclick="window.instapro.pressPinKey('0')">0</button>
-        <button class="key-btn" style="font-size:18px;" onclick="window.instapro.deletePinDigit()">⌫</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Story Viewer Modal -->
-  <div class="modal-overlay" id="storyViewerModal">
-    <div class="modal-dialog story-viewer-dialog">
-      <div>
-        <!-- Countdown Progress Bar -->
-        <div style="width:100%; height:3px; background:rgba(255,255,255,0.3); border-radius:2px; overflow:hidden; margin-bottom:12px;">
-          <div id="storyViewerProgressBar" style="width:0%; height:100%; background:#fff;"></div>
-        </div>
-
-        <div class="story-viewer-header">
-          <div style="display:flex; align-items:center; gap:8px;">
-            <img src="/Screenshots/ncy.png" style="width:30px; height:30px; border-radius:50%;" alt="User" />
-            <span id="storyViewerUser" style="font-size:13px; font-weight:700;">@rakshittips</span>
-            <span style="font-size:11px; opacity:0.6;">Ghost Mode Active 👁️</span>
-          </div>
-          <button style="background:transparent; border:none; color:#fff; font-size:18px; cursor:pointer;" onclick="window.instapro.closeStoryViewer()">✕</button>
-        </div>
-      </div>
-
-      <!-- Story Media -->
-      <div style="flex:1; display:flex; align-items:center; justify-content:center; padding:10px 0;">
-        <img id="storyViewerImg" src="/Screenshots/InstaPro-01.jpg" style="max-height:100%; max-width:100%; border-radius:18px; object-fit:contain;" alt="Story" />
-      </div>
-
-      <!-- Story In-App Download Bar -->
-      <div style="display:flex; align-items:center; justify-content:space-between; padding-top:10px;">
-        <div style="font-size:12px; color:rgba(255,255,255,0.7);">Anonymous view mode</div>
-        <button class="story-dl-banner-btn" onclick="window.instapro.downloadActiveStory()">
-          📥 Download Story
-        </button>
       </div>
     </div>
   </div>
