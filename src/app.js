@@ -161,7 +161,7 @@ export function openLightbox(idx) {
   const desc = document.getElementById('lbDesc');
   const count = document.getElementById('lbCount');
 
-  if (img) img.src = `/Screenshots/${item.file}`;
+  if (img) img.src = `./Screenshots/${item.file}`;
   if (title) title.textContent = item.title;
   if (desc) desc.textContent = item.desc;
   if (count) count.textContent = `${idx + 1} of ${screenshotsData.length}`;
